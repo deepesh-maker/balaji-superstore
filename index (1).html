@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Balaji Super Store</title>
+<style>
+:root{--green:#123d2b;--green2:#24583f;--bg:#f4f7f3;--text:#17251d;--muted:#66736b;--line:#dbe5dc}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 8% 4%,#e0f3df 0,transparent 28%),radial-gradient(circle at 95% 30%,#fff0cf 0,transparent 24%),linear-gradient(135deg,#f5faf5,#eef5ee);color:var(--text)}
+.wrap{max-width:800px;margin:24px auto;padding:0 14px}.hero{background:linear-gradient(125deg,#0d3423,#1c6340 70%,#318253);color:white;padding:26px;border-radius:24px 24px 0 0;position:relative;overflow:hidden}.hero:after{content:"✦";position:absolute;right:24px;top:6px;font-size:94px;color:#ffffff12;transform:rotate(18deg)}
+.brand{display:flex;gap:14px;align-items:center}.logo{font-size:36px;background:#24583f;border-radius:14px;padding:12px}.hero h1{margin:0 0 6px;font-size:26px}.hero p{margin:4px 0;color:#d4e9d9;font-size:14px}
+main{background:#ffffffed;padding:22px;border-radius:0 0 24px 24px;box-shadow:0 18px 50px #193d2b18;backdrop-filter:blur(8px)}.card{border:1px solid #dce9dd;border-radius:17px;padding:17px;margin:14px 0;background:linear-gradient(145deg,#fff,#f8fcf8);box-shadow:0 5px 16px #193d2b08}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}
+h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:0 0 10px}label{display:block;font-size:13px;font-weight:bold;margin:12px 0 6px}
+input,textarea{width:100%;padding:13px;border:1px solid #cbd7cd;border-radius:12px;font:inherit;background:#fff;transition:border .15s,box-shadow .15s}input:focus,textarea:focus{outline:none;border-color:#328052;box-shadow:0 0 0 3px #3280521c}textarea{min-height:90px;resize:vertical}
+button{border:0;background:linear-gradient(110deg,#123d2b,#28754b);color:white;padding:13px 17px;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:10px;box-shadow:0 5px 12px #123d2b18;transition:transform .15s,box-shadow .15s}button:hover{transform:translateY(-1px);box-shadow:0 8px 16px #123d2b24}button.secondary{background:white;color:var(--green);border:1px solid var(--green)}button.danger{background:#a32f2f}button.small{padding:8px 10px;font-size:12px}
+.hidden{display:none}.muted{color:var(--muted);font-size:13px;line-height:1.5}.msg{font-size:13px;margin-top:9px;color:#a32f2f}.success{color:#167344}.code{font-size:24px;letter-spacing:1px;font-weight:bold;background:#eef7ef;padding:12px;border-radius:10px;text-align:center;overflow-wrap:anywhere}.badge{display:inline-block;background:#fff0c9;color:#765300;padding:5px 8px;border-radius:20px;font-size:12px}.badge.done{background:#dff6e7;color:#17653a}.order{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0}.order p{margin:6px 0;overflow-wrap:anywhere}.footer{text-align:center;color:var(--muted);font-size:12px;padding:16px}
+@media(min-width:600px){.wrap{margin:40px auto}.hero{padding:28px}main{padding:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero"><div class="brand"><div class="logo">🛒</div><div><h1>Balaji Super Store</h1><p>Fresh groceries, delivered to your door</p><p>📍 Rewari · Kankarwali · Near RBS School</p><p>🥬 Fresh picks · 🧺 Daily essentials · 🚚 Easy ordering</p></div></div></header>
+<main>
+<section id="home">
+<h2>Welcome! 👋</h2><p class="muted">Your neighbourhood grocery store — simple, fresh and convenient.</p><div class="row"><div class="card"><h3>🥦 Fresh groceries</h3><p class="muted">Everyday essentials in one place.</p></div><div class="card"><h3>🛵 Easy ordering</h3><p class="muted">Send your list and delivery address.</p></div></div><p class="muted">Mobile number se continue karo, ya tracking code se order check karo.</p>
+<label>Mobile number</label><input id="phone" inputmode="numeric" maxlength="10" placeholder="10-digit Indian mobile number">
+<button onclick="loginCustomer()">Continue as Customer&nbsp; →</button><p class="muted">Enter a valid 10-digit Indian mobile number starting with 6–9.</p>
+<div id="homeMsg" class="msg"></div>
+<div class="card"><h3>Track an order</h3><input id="trackCode" placeholder="Enter tracking code"><button class="secondary" onclick="trackOrder()">Track Order</button><div id="trackResult" class="muted"></div></div>
+<button class="secondary" onclick="show('adminLogin')">🔐 Admin Login</button>
+</section>
+<section id="customer" class="hidden">
+<h2>Place Your Order</h2><p id="customerPhone" class="muted"></p>
+<label>Items you need</label><textarea id="items" placeholder="Example: Aata 5 kg&#10;Sugar 1 kg&#10;Milk 2 packets"></textarea>
+<label>Delivery address</label><textarea id="address" placeholder="Enter complete delivery address"></textarea>
+<button onclick="placeOrder()">Place Order</button><div id="orderMsg" class="msg"></div>
+<div class="card"><h3>My Pending Orders</h3><div id="myOrders" class="muted">No pending orders yet.</div></div>
+<button class="secondary" onclick="show('home')">Back to Home</button>
+</section>
+<section id="thanks" class="hidden">
+<div class="card" style="text-align:center"><div style="font-size:42px">✅</div><h2>Thank You!</h2><p>Your order has been submitted to the store database.</p><p class="muted">Save this tracking code:</p><div class="code" id="newCode"></div><button onclick="copyCode()">Copy Tracking Code</button><button class="secondary" onclick="show('home')">Done</button></div>
+</section>
+<section id="adminLogin" class="hidden">
+<h2>🔐 Admin Login</h2><p class="muted">Enter the admin password to open the dashboard.</p>
+<label>Admin password</label><input id="adminPass" type="password" placeholder="Enter admin password">
+<button onclick="loginAdmin()">Unlock Admin Panel</button><div id="adminMsg" class="msg"></div>
+<button class="secondary" onclick="show('home')">Back to Home</button>
+<p class="muted">Secure admin authentication needs to be configured before publishing the admin dashboard.</p>
+</section>
+<section id="admin" class="hidden">
+<h2>Admin Dashboard</h2><p id="orderCount" class="muted"></p><div id="allOrders"></div>
+<button class="secondary" onclick="show('home')">Log Out</button>
+</section>
+</main><div class="footer">Contact: 9996084839 · Rewari, Kankarwali, near RBS School</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Paste your Supabase Project URL and Publishable key below.
+const SUPABASE_URL = " https://kcylbaidiewblakpaqcj.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vw5bJ9BeCzfKwouerYriCA_dBp9XgOa";
+const supabaseReady = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("PASTE_") && SUPABASE_PUBLISHABLE_KEY && !SUPABASE_PUBLISHABLE_KEY.includes("PASTE_");
+const supabaseClient = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
+// Admin dashboard intentionally isn't allowed to read all customer orders until secure admin authentication is configured.
+let currentPhone = "";
+let latestCode = "";
+function show(id){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");if(id==="customer")renderMyOrders();if(id==="admin")renderAdmin();}
+function readOrders(){try{return JSON.parse(localStorage.getItem("bss_orders")||"[]")}catch(e){return []}}
+function saveOrders(list){localStorage.setItem("bss_orders",JSON.stringify(list))}
+function loginCustomer(){const p=document.getElementById("phone").value.trim();if(!/^[6-9]\d{9}$/.test(p)){document.getElementById("homeMsg").textContent="Valid 10-digit Indian mobile number daalo.";return}currentPhone=p;document.getElementById("customerPhone").textContent="Mobile number: "+p;document.getElementById("homeMsg").textContent="";show("customer")}
+function makeCode(){return (crypto.randomUUID ? crypto.randomUUID() : "BSS-"+Math.random().toString(36).slice(2,10).toUpperCase())}
+async function placeOrder(){
+ const items=document.getElementById("items").value.trim(),address=document.getElementById("address").value.trim();const msg=document.getElementById("orderMsg");
+ if(!items||!address){msg.textContent="Items aur delivery address dono bharo.";return}
+ if(!supabaseClient){msg.textContent="Supabase connect nahi hua. Index file mein Project URL aur Publishable key bharni hai.";return}
+ const code=makeCode(); msg.textContent="Order save ho raha hai...";
+ const {error}=await supabaseClient.from("orders").insert({customer_name:"Customer",mobile:currentPhone,address,items:{text:items},status:"Pending",tracking_code:code});
+ if(error){msg.textContent="Order save nahi hua: "+error.message+". SQL policies/setup ko check karna hoga.";return}
+ latestCode=code;document.getElementById("newCode").textContent=latestCode;document.getElementById("items").value="";document.getElementById("address").value="";msg.textContent="";show("thanks");
+}
+function copyCode(){if(navigator.clipboard){navigator.clipboard.writeText(latestCode).then(()=>alert("Tracking code copied!")).catch(()=>alert("Tracking code: "+latestCode))}else alert("Tracking code: "+latestCode)}
+async function trackOrder(){const code=document.getElementById("trackCode").value.trim();const result=document.getElementById("trackResult");if(!supabaseClient){result.textContent="Pehle index file mein Supabase Project URL aur Publishable key add karo.";return}result.textContent="Tracking ke liye secure lookup function abhi configure karna baaki hai. Admin/customer data ko public read karna safe nahi hai."}
+function renderMyOrders(){document.getElementById("myOrders").textContent="Order tracking aur order history secure database function set hone ke baad yahan dikhegi."}
+function loginAdmin(){document.getElementById("adminMsg").textContent="Secure admin login abhi setup karna baaki hai. Public website par password code mein rakhna safe nahi hota."}
+function renderAdmin(){document.getElementById("orderCount").textContent="Secure admin authentication required";document.getElementById("allOrders").innerHTML="<p class='muted'>Admin orders dashboard tabhi enable hoga jab Supabase Auth aur admin permissions configure honge. Customer orders ko public read access nahi diya gaya hai.</p>"}
+function advanceOrder(id){alert("Admin authentication setup hone ke baad status update enable hoga.")}
+function deleteOrder(id){alert("Admin authentication setup hone ke baad order deletion enable hoga.")}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+</script>
+</body></html>
